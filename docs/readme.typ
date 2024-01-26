@@ -12,7 +12,7 @@
 )
 
 #let showman-config = (
-  page-size: (width: 4in, height: auto),
+  page-size: (width: 4.1in, height: auto),
   eval-kwargs: (
     scope: (wrap-it: wrap-it),
     unpack-modules: true,
@@ -22,7 +22,7 @@
     ",
   )
 )
-#show <example-output>: set text(font: "New Computer Modern")
+#show <example-output>: set text(font: "")
 #show link: it => {
   set text(fill: blue)
   underline(it)
