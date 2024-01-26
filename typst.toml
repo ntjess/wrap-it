@@ -7,7 +7,7 @@ license = "Unlicense"
 description = "Wrap text around figures and content"
 repository = "https://github.com/ntjess/wrap-it"
 keywords = ["wrapfig", "wrap", "align", "image"]
-exclude = ["docs/manual.pdf"]
+exclude = ["manual.pdf"]
 
 
 [tool.packager]
