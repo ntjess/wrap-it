@@ -19,7 +19,7 @@
 
 #let _get-chunk(words, end, reverse, start: 0) = {
   if end < 0 {
-    return words
+    return words.join(" ")
   }
   if reverse { words = words.rev() }
   let subset = words.slice(start, end)
