@@ -6,7 +6,9 @@ content. However, you can use `wrap-it` to mimic much of this
 functionality:
 
 - Wrapping images left or right of their text
+
 - Specifying margins
+
 - And more
 
 Detailed descriptions of each parameter are available in the <u>[wrap-it
