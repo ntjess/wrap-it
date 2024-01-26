@@ -46,11 +46,11 @@
       let _ = fields.remove(key)
     }
   }
-  let positional = ()
+  let positional = (new-content, )
   if "styles" in fields {
     positional.push(fields.remove("styles"))
   }
-  element.func()(..fields, new-content, ..positional)
+  element.func()(..fields, ..positional)
 }
 
 #let split-other(body, height-func, goal-height, align, splitter-func) = {
@@ -61,12 +61,13 @@
   let words = body.text.split(" ")
   let reverse = align.y == bottom
   let wrap-index = _get-wrap-index(height-func, words, goal-height, reverse)
-  let chunk = _rewrap(body, _get-chunk(words, wrap-index, reverse))
+  let _rewrap = _rewrap.with(body)
   if wrap-index > 0 {
-    let end-chunk = _get-chunk(words, words.len(), reverse, start: wrap-index)
-    (wrapped: chunk, rest: _rewrap(body, end-chunk))
+    let chunk = _rewrap(_get-chunk(words, wrap-index, reverse))
+    let end-chunk = _rewrap(_get-chunk(words, words.len(), reverse, start: wrap-index))
+    (wrapped: chunk, rest: end-chunk)
   } else {
-    (wrapped: none, rest: chunk)
+    (wrapped: none, rest: body)
   }
 }
 
