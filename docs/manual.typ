@@ -1,4 +1,4 @@
-#import "@preview/tidy:0.2.0"
+#import "@preview/tidy:0.3.0"
 #import "@preview/showman:0.1.1"
 #import "../wrap-it.typ"
 #show raw.where(block: true, lang: "typ"): showman.formatter.format-raw.with(width: 100%)
