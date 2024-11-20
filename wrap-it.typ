@@ -13,8 +13,8 @@
   grid(..args, columns: 2, rows: 2, column-gutter: 1em, ..kwargs)
 }
 
-#let _grid-height(content, container-size, styles) = {
-  measure(box(width: container-size.width, content), styles).height
+#let _grid-height(content, container-size) = {
+  measure(box(width: container-size.width, content)).height
 }
 
 #let _get-chunk(words, end, reverse, start: 0) = {
@@ -145,11 +145,11 @@
   return body-splitter(body, height-func, goal-height, align, splitter)
 }
 
-#let _inner-wrap-content(to-wrap, y-align, grid-func, styles, container-size, ..grid-kwargs) = {
-  let height-func(txt) = _grid-height(grid-func(txt), container-size, styles)
+#let _inner-wrap-content(to-wrap, y-align, grid-func, container-size, ..grid-kwargs) = {
+  let height-func(txt) = _grid-height(grid-func(txt), container-size)
   let goal-height = height-func([])
   if y-align == top {
-     goal-height += measure(v(1em), styles).height
+     goal-height += measure(v(1em)).height
   }
   let result = splitter(to-wrap, height-func, goal-height, y-align)
   if y-align == top {
@@ -256,10 +256,10 @@
   let y-align = if align.y == bottom { bottom } else { top }
 
   if styles != auto and size != auto {
-    _inner-wrap-content(to-wrap, y-align, gridded, styles, size, ..grid-kwargs)
+    _inner-wrap-content(to-wrap, y-align, gridded, size, ..grid-kwargs)
   } else {
     style(styles => layout(container-size => {
-      _inner-wrap-content(to-wrap, y-align, gridded, styles, container-size, ..grid-kwargs)
+      _inner-wrap-content(to-wrap, y-align, gridded, container-size, ..grid-kwargs)
     }))
   }
 }
