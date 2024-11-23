@@ -1,6 +1,6 @@
 [package]
 name = "wrap-it"
-version = "0.1.0"
+version = "0.1.1"
 entrypoint = "wrap-it.typ"
 authors = ["Nathan Jessurun"]
 license = "Unlicense"

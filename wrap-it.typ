@@ -13,15 +13,17 @@
   grid(..args, columns: 2, rows: 2, column-gutter: 1em, ..kwargs)
 }
 
-#let _grid-height(content, container-size, styles) = {
-  measure(box(width: container-size.width, content), styles).height
+#let _grid-height(content, container-size) = {
+  measure(box(width: container-size.width, content)).height
 }
 
 #let _get-chunk(words, end, reverse, start: 0) = {
   if end < 0 {
     return words.join(" ")
   }
-  if reverse { words = words.rev() }
+  if reverse {
+    words = words.rev()
+  }
   let subset = words.slice(start, end)
   if reverse {
     subset = subset.rev()
@@ -46,7 +48,7 @@
       let _ = fields.remove(key)
     }
   }
-  let positional = (new-content, )
+  let positional = (new-content,)
   if "styles" in fields {
     positional.push(fields.remove("styles"))
   }
@@ -65,7 +67,13 @@
   if wrap-index > 0 {
     let chunk = _rewrap(_get-chunk(words, wrap-index, reverse))
     let end-chunk = _rewrap(_get-chunk(words, words.len(), reverse, start: wrap-index))
-    (wrapped: chunk, rest: end-chunk)
+    (
+      wrapped: context {
+        chunk
+        linebreak(justify: par.justify)
+      },
+      rest: end-chunk,
+    )
   } else {
     (wrapped: none, rest: body)
   }
@@ -73,7 +81,11 @@
 
 #let split-has-children(body, height-func, goal-height, align, splitter-func) = {
   let reverse = align.y == bottom
-  let children = if reverse { body.children.rev() } else { body.children }
+  let children = if reverse {
+    body.children.rev()
+  } else {
+    body.children
+  }
   for (ii, child) in children.enumerate() {
     let prev-children = children.slice(0, ii).join()
     let new-height-func(child) = {
@@ -86,7 +98,7 @@
     // height func calculator should now account for prior children
     let split = splitter-func(child, new-height-func, goal-height, align)
     let new-children = (..children.slice(0, ii), split.wrapped)
-    let new-rest = children.slice(ii+1)
+    let new-rest = children.slice(ii + 1)
     if split.rest != none {
       new-rest.insert(0, split.rest)
     }
@@ -96,12 +108,10 @@
     }
     return (
       wrapped: _rewrap(body, new-children),
-      rest: _rewrap(body, new-rest)
+      rest: _rewrap(body, new-rest),
     )
   }
-  panic(
-    "This function should only be called if the seq child should be split"
-  )
+  panic("This function should only be called if the seq child should be split")
 }
 
 #let split-has-body(body, height-func, goal-height, align, splitter-func) = {
@@ -145,11 +155,11 @@
   return body-splitter(body, height-func, goal-height, align, splitter)
 }
 
-#let _inner-wrap-content(to-wrap, y-align, grid-func, styles, container-size, ..grid-kwargs) = {
-  let height-func(txt) = _grid-height(grid-func(txt), container-size, styles)
+#let _inner-wrap-content(to-wrap, y-align, grid-func, container-size, ..grid-kwargs) = {
+  let height-func(txt) = _grid-height(grid-func(txt), container-size)
   let goal-height = height-func([])
   if y-align == top {
-     goal-height += measure(v(1em), styles).height
+    goal-height += measure(v(1em)).height
   }
   let result = splitter(to-wrap, height-func, goal-height, y-align)
   if y-align == top {
@@ -204,7 +214,7 @@
 /// ```
 ///
 /// - fixed (content): Content that will not be wrapped, (i.e., a figure).
-/// - to-wrap (content): Content that will be wrapped, (i.e., text). Currently, logic 
+/// - to-wrap (content): Content that will be wrapped, (i.e., text). Currently, logic
 ///   works best with pure-text content, but hypothetically will work with any `content`.
 /// - align (alignment): Alignment of `fixed` relative to `to-wrap`. `top` will align
 ///   the top of `fixed` with the top of `to-wrap`, and `bottom` will align the bottom of
@@ -244,23 +254,31 @@
 ///  )
 ///  ```
 ///
-#let wrap-content(fixed, to-wrap, align: top + left, styles: auto, size: auto, ..grid-kwargs) = {
+#let wrap-content(fixed, to-wrap, align: top + left, size: auto, ..grid-kwargs) = {
   if center in (align.x, align.y) {
     panic("Center alignment is not supported")
   }
 
   // "none" x alignment defaults to left
-  let dir = if align.x == right { rtl } else { ltr }
+  let dir = if align.x == right {
+    rtl
+  } else {
+    ltr
+  }
   let gridded(..args) = box(_gridded(dir, fixed, ..grid-kwargs, ..args))
   // "none" y alignment defaults to top
-  let y-align = if align.y == bottom { bottom } else { top }
-
-  if styles != auto and size != auto {
-    _inner-wrap-content(to-wrap, y-align, gridded, styles, size, ..grid-kwargs)
+  let y-align = if align.y == bottom {
+    bottom
   } else {
-    style(styles => layout(container-size => {
-      _inner-wrap-content(to-wrap, y-align, gridded, styles, container-size, ..grid-kwargs)
-    }))
+    top
+  }
+
+  if size != auto {
+    _inner-wrap-content(to-wrap, y-align, gridded, size, ..grid-kwargs)
+  } else {
+    layout(container-size => {
+      _inner-wrap-content(to-wrap, y-align, gridded, container-size, ..grid-kwargs)
+    })
   }
 }
 
@@ -293,19 +311,17 @@
   bottom-kwargs: (:),
 ) = {
   top-kwargs = top-kwargs + (
-    align: top-kwargs.at("align", default: top + left).x + top
+    align: top-kwargs.at("align", default: top + left).x + top,
   )
   bottom-kwargs = bottom-kwargs + (
-    align: bottom-kwargs.at("align", default: bottom + right).x + bottom
+    align: bottom-kwargs.at("align", default: bottom + right).x + bottom,
   )
-  style(styles => {
-    layout(size => {
-      let wrapfig(..args) = wrap-content(styles: styles, size: size, ..args)
-      wrapfig(top-fixed, ..top-kwargs)[
-        #wrapfig(bottom-fixed, ..bottom-kwargs)[
-          #body
-        ]
+  layout(size => {
+    let wrapfig(..args) = wrap-content(size: size, ..args)
+    wrapfig(top-fixed, ..top-kwargs)[
+      #wrapfig(bottom-fixed, ..bottom-kwargs)[
+        #body
       ]
-    })
+    ]
   })
 }
