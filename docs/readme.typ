@@ -1,28 +1,23 @@
-#import "@preview/showman:0.1.0"
-#import "@preview/wrap-it:0.1.0"
+#import "@preview/showman:0.1.2"
 
-#show: showman.formatter.template.with(
-  eval-kwargs: (
-    scope: (wrap-it: wrap-it),
-    eval-prefix: "
+
+#let eval-kwargs = (
+  eval-prefix: "
+      #import \"@preview/wrap-it:0.1.1\"
       #let wrap-content(..args) = output(wrap-it.wrap-content(..args))
       #let wrap-top-bottom(..args) = output(wrap-it.wrap-top-bottom(..args))
     ",
-  )
 )
+
+
+// Uncomment to render examples, comment when generating readme md file
+#show: showman.formatter.template.with(eval-kwargs: (eval-kwargs))
 
 #let showman-config = (
   page-size: (width: 4.1in, height: auto),
-  eval-kwargs: (
-    scope: (wrap-it: wrap-it),
-    unpack-modules: true,
-    eval-prefix: "
-      #let wrap-content(..args) = output(wrap-it.wrap-content(..args))
-      #let wrap-top-bottom(..args) = output(wrap-it.wrap-top-bottom(..args))
-    ",
-  )
+  eval-kwargs: eval-kwargs,
 )
-#show <example-output>: set text(font: "")
+#show <example-output>: set text(font: "Libertinus Serif", size: 10pt)
 #show link: it => {
   set text(fill: blue)
   underline(it)
@@ -80,5 +75,5 @@ The easiest way to get a uniform, highly-customizable margin is through boxing y
   rect(fill: lime, radius: 0.5em),
   caption: [Another figure],
 )
-#wrap-top-bottom(boxed, fig2, lorem(60))
+#wrap-top-bottom(boxed, fig2, lorem(62))
 ```

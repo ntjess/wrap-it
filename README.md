@@ -1,8 +1,8 @@
 # Wrap-It: Wrapping text around figures & content
 
-Until <u><https://github.com/typst/typst/issues/553></u> is resolved,
-`typst` doesn’t natively support wrapping text around figures or other
-content. However, you can use `wrap-it` to mimic much of this
+Until <u><u><https://github.com/typst/typst/issues/553></u></u> is
+resolved, `typst` doesn’t natively support wrapping text around figures
+or other content. However, you can use `wrap-it` to mimic much of this
 functionality:
 
 - Wrapping images left or right of their text
@@ -11,8 +11,9 @@ functionality:
 
 - And more
 
-Detailed descriptions of each parameter are available in the <u>[wrap-it
-documentation](https://github.com/ntjess/wrap-it/blob/main/docs/manual.pdf)</u>.
+Detailed descriptions of each parameter are available in the
+<u><u>[wrap-it
+documentation](https://github.com/ntjess/wrap-it/blob/main/docs/manual.pdf)</u></u>.
 
 # Installation
 
@@ -36,7 +37,7 @@ The easiest method is to import `wrap-it: wrap-content` from the
 #let body = lorem(40)
 #wrap-content(fig, body)
 ```
-![Example 1](https://www.github.com/ntjess/wrap-it/raw/v0.1.0/assets/example-1.png)
+![Example 1](https://www.github.com/ntjess/wrap-it/raw/v0.1.1/assets/example-1.png)
 
 ## Changing alignment and margin
 
@@ -48,7 +49,7 @@ The easiest method is to import `wrap-it: wrap-content` from the
   column-gutter: 2em
 )
 ```
-![Example 2](https://www.github.com/ntjess/wrap-it/raw/v0.1.0/assets/example-2.png)
+![Example 2](https://www.github.com/ntjess/wrap-it/raw/v0.1.1/assets/example-2.png)
 
 ## Uniform margin around the image
 
@@ -61,7 +62,7 @@ boxing your image:
   #lorem(40)
 ]
 ```
-![Example 3](https://www.github.com/ntjess/wrap-it/raw/v0.1.0/assets/example-3.png)
+![Example 3](https://www.github.com/ntjess/wrap-it/raw/v0.1.1/assets/example-3.png)
 
 ## Wrapping two images in the same paragraph
 
@@ -70,6 +71,6 @@ boxing your image:
   rect(fill: lime, radius: 0.5em),
   caption: [Another figure],
 )
-#wrap-top-bottom(boxed, fig2, lorem(60))
+#wrap-top-bottom(boxed, fig2, lorem(62))
 ```
-![Example 4](https://www.github.com/ntjess/wrap-it/raw/v0.1.0/assets/example-4.png)
+![Example 4](https://www.github.com/ntjess/wrap-it/raw/v0.1.1/assets/example-4.png)
