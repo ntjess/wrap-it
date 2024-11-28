@@ -44,20 +44,20 @@ The easiest method is to import `wrap-it: wrap-content` from the `@preview` pack
 ```globalexample
 #set par(justify: true)
 #let fig = figure(
-  rect(fill: teal, radius: 0.5em, width: 8em),
-  caption: [A figure],
+rect(fill: teal, radius: 0.5em, width: 8em),
+caption: [A figure],
 )
-#let body = lorem(40)
+#let body = lorem(30)
 #wrap-content(fig, body)
 ```
 
 == Changing alignment and margin
 ```globalexample
 #wrap-content(
-  fig,
-  body,
-  align: bottom + right,
-  column-gutter: 2em
+fig,
+body,
+align: bottom + right,
+column-gutter: 2em
 )
 ```
 
@@ -66,14 +66,28 @@ The easiest way to get a uniform, highly-customizable margin is through boxing y
 ```globalexample
 #let boxed = box(fig, inset: 0.5em)
 #wrap-content(boxed)[
-  #lorem(40)
+#lorem(30)
 ]
 ```
 == Wrapping two images in the same paragraph
+Note that for longer captions (as is the case in the bottom figure below), providing an explicit `columns` parameter is necessary to inform caption text of where to wrap.
 ```globalexample
 #let fig2 = figure(
-  rect(fill: lime, radius: 0.5em),
-  caption: [Another figure],
+rect(fill: lime, radius: 0.5em),
+caption: [#lorem(10)],
 )
-#wrap-top-bottom(boxed, fig2, lorem(62))
+#wrap-top-bottom(bottom-kwargs: (columns: (1fr, 2fr)), boxed, fig2, lorem(50))
+```
+
+== Adding a label to a wrapped figure
+Typst can only append labels to figures in content mode. So, when wrapping text around a figure that needs a label, you must first place your figure in a content block with its label, then wrap it:
+```example
+#show ref: it => underline(text(blue, it))
+#let fig = [
+  #figure(
+    rect(fill: red, radius: 0.5em, width: 8em),
+    caption:[Labeled]
+  )<figure-1>
+]
+#wrap-content(fig, [Fortunately, @figure-1's label can be referenced within the wrapped text. #lorem(15)])
 ```
