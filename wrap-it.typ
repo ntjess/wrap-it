@@ -214,15 +214,16 @@
 /// ```
 ///
 /// - fixed (content): Content that will not be wrapped, (i.e., a figure).
+///
 /// - to-wrap (content): Content that will be wrapped, (i.e., text). Currently, logic
 ///   works best with pure-text content, but hypothetically will work with any `content`.
+///
 /// - align (alignment): Alignment of `fixed` relative to `to-wrap`. `top` will align
 ///   the top of `fixed` with the top of `to-wrap`, and `bottom` will align the bottom of
 ///   `fixed` with the bottom of `to-wrap`. `left` and `right` alignments determine
 ///   horizontal alignment of `fixed` relative to `to-wrap`. Alignments can be combined,
 ///   i.e., `bottom + right` will align the bottom-right corner of `fixed` with the
 ///   bottom-right corner of `to-wrap`.
-///
 ///  ```typ
 ///  #wrap-content(
 ///    make-fig("turbo"),
@@ -230,6 +231,11 @@
 ///    align: bottom + right
 ///  )
 ///  ```
+///
+/// - size (size, auto): Size of the wrapping container. If `auto`, this will be set to
+///   the current container size. Otherwise, wrapping logic will attempt to stay within
+///   the provided constraints.
+///
 /// - ..grid-kwargs (any): Keyword arguments to pass to the underlying `grid` function.
 ///   Of note:
 ///     - `column-gutter` controls horizontal margin between `fixed` and `to-wrap`. Or,
@@ -254,7 +260,13 @@
 ///  )
 ///  ```
 ///
-#let wrap-content(fixed, to-wrap, align: top + left, size: auto, ..grid-kwargs) = {
+#let wrap-content(
+  fixed,
+  to-wrap,
+  align: top + left,
+  size: auto,
+  ..grid-kwargs,
+) = {
   if center in (align.x, align.y) {
     panic("Center alignment is not supported")
   }
