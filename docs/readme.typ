@@ -1,10 +1,8 @@
 #import "@preview/showman:0.1.2"
-
+#import "/wrap-it.typ"
 
 #let eval-kwargs = (
   eval-prefix: "
-      #import \"@preview/wrap-it:0.1.1\"
-
       #set par(justify: true)
       #let fig = figure(
         rect(fill: teal, radius: 0.5em, width: 8em),
@@ -15,10 +13,13 @@
       #let wrap-content(..args) = output(wrap-it.wrap-content(..args))
       #let wrap-top-bottom(..args) = output(wrap-it.wrap-top-bottom(..args))
     ",
+  scope: (wrap-it: wrap-it),
 )
+// TODO: Can't find how to tell pandoc the --root is at /, so it doesn't have access to typst.toml
+#let pkg-version = "0.1.1"
+// #let pkg-version = toml("/typst.toml").at("package").at("version")
 
 
-// Uncomment to render examples, comment when generating readme md file
 #show: showman.formatter.template.with(eval-kwargs: (eval-kwargs))
 
 #let showman-config = (
@@ -41,9 +42,9 @@ Detailed descriptions of each parameter are available in the #link("https://gith
 
 = Installation
 The easiest method is to import `wrap-it: wrap-content` from the `@preview` package:
-```typ
-#import "@preview/wrap-it:0.1.0": wrap-content
-```
+#let raw-string = "#import \"@preview/wrap-it:" + pkg-version + "\": wrap-content"
+
+#raw(raw-string, lang: "typ")
 
 = Sample use:
 == Vanilla

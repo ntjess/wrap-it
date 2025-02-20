@@ -20,9 +20,9 @@
   eval(
     mode: "markup",
     "#let output(body) = body;\n" + eval-kwargs.eval-prefix + example,
+    scope: eval-kwargs.scope,
   )
   if ii != all-blocks.len() - 1 {
     pagebreak()
   }
 }
-
